@@ -29,6 +29,12 @@ static bool wlan_wake = true;
 module_param(wlan_wake, bool, 0644);
 static bool enable_bluedroid_timer_ws = true;
 module_param(enable_bluedroid_timer_ws, bool, 0644);
+static bool enable_qcom_rx_wakelock_ws = true;
+module_param(enable_qcom_rx_wakelock_ws, bool, 0644);
+static bool enable_timerfd_ws = true;
+module_param(enable_timerfd_ws, bool, 0644);
+static bool enable_netlink_ws = true;
+module_param(enable_netlink_ws, bool, 0644);
 
 #include "power.h"
 
@@ -442,6 +448,14 @@ static void wakeup_source_activate(struct wakeup_source *ws)
 
 	if (!enable_bluedroid_timer_ws && !strcmp(ws->name, "bluedroid_timer"))
 		return;
+	
+	if ((!enable_qcom_rx_wakelock_ws && !strncmp(ws->name, "qcom_rx_wakelock", 16)) ||
+			(!enable_timerfd_ws && !strncmp(ws->name, "[timerfd]", 9)) ||
+			(!enable_netlink_ws && !strncmp(ws->name, "NETLINK", 7))) {
+		return;
+	}
+
+
 
 	/*
 	 * active wakeup source should bring the system
