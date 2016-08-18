@@ -53,6 +53,7 @@ config FB_AUTO_CABC
 	bool "Support for AUTO_CABC fuction"
 	depends on HUAWEI_KERNEL
 	default n
+	---help---
 	The MDSS debugging provides support to enable display debugging
 	features to: Dump MDSS registers during driver errors, panic
 	driver during fatal errors and enable some display-driver logging
