@@ -561,6 +561,7 @@ config MSM_PERFORMANCE
 	  It ensures that no more than a user specified number of CPUs stay
 	  online at any given point in time.
 
+<<<<<<< HEAD
 config MSM_PERFORMANCE_HOTPLUG_ON
         bool "Hotplug functionality through msm_performance turned on"
         depends on MSM_PERFORMANCE
@@ -577,6 +578,15 @@ config FORCE_FAST_CHARGE
   	help
 	  This allows users to override default charge rate for both USB and AC
 	  charger input current
+=======
+config MSM_HOTPLUG
+	bool "MSM hotplug driver"
+	depends on HOTPLUG_CPU
+	default n
+	help
+	  The MSM hotplug driver controls on-/offlining of additional cores based
+	  on current cpu load.
+>>>>>>> 0a1d0a2... soc:qcom: msm_hotplug v2.4
 
 source "drivers/soc/qcom/memshare/Kconfig"
 
