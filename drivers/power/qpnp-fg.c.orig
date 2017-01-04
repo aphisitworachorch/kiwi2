@@ -1292,12 +1292,12 @@ static irqreturn_t fg_mem_avail_irq_handler(int irq, void *_chip)
 		return IRQ_HANDLED;
 	}
 
-
+<<<<<<< HEAD
 	if (fg_check_sram_access(chip)) {
 		if (fg_debug_mask & FG_IRQS)
 			pr_info("sram access granted\n");
 		complete_all(&chip->sram_access);
-
+=======
 	if ((bid_info & 0x3) == 0) {
 		pr_err("can't determine battery id 0x%02x\n", bid_info);
 		return -EINVAL;
@@ -4791,7 +4791,8 @@ static int fg_hw_init(struct fg_chip *chip)
 }
 
 #define INIT_JEITA_DELAY_MS 1000
-
+<<<<<<< HEAD
+=======
 
 static void delayed_init_work(struct work_struct *work)
 {
@@ -5055,8 +5056,8 @@ of_init_fail:
 	return rc;
 }
 
-
-
+<<<<<<< HEAD
+=======
 static void check_and_update_sram_data(struct fg_chip *chip)
 {
 	unsigned long current_time = 0, next_update_time, time_left;
