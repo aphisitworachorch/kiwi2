@@ -26,7 +26,7 @@ NEW_OUT=$OUT_DIR/tools
 
 # Kernel Version Info
 BASE="-HotDoG™"
-CUR_VER="-1"
+CUR_VER="-1.5"
 HD_VER="$BASE$CUR_VER"
  
 
