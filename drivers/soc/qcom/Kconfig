@@ -565,7 +565,7 @@ config MSM_PERFORMANCE
 config MSM_PERFORMANCE_HOTPLUG_ON
         bool "Hotplug functionality through msm_performance turned on"
         depends on MSM_PERFORMANCE
-        default y
+        default n
         help
 	  If some other core-control driver is present turn off the core-control
 	  capability of msm_performance driver. Setting this flag to false will
@@ -582,7 +582,7 @@ config FORCE_FAST_CHARGE
 config MSM_HOTPLUG
 	bool "MSM hotplug driver"
 	depends on HOTPLUG_CPU
-	default n
+	default y
 	help
 	  The MSM hotplug driver controls on-/offlining of additional cores based
 	  on current cpu load.
