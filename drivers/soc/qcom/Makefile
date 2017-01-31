@@ -79,8 +79,6 @@ obj-$(CONFIG_MSM_SYSTEM_HEALTH_MONITOR) += system_health_monitor.o
 obj-$(CONFIG_MSM_RTB) += msm_rtb-hotplug.o
 obj-$(CONFIG_QCOM_EARLY_RANDOM)	+= early_random.o
 obj-$(CONFIG_MSM_PACMAN)        += msm_pacman.o
-<<<<<<< HEAD
 obj-$(CONFIG_FORCE_FAST_CHARGE) += fastchg.o
-=======
 obj-$(CONFIG_MSM_HOTPLUG) += msm_hotplug.o
->>>>>>> 0a1d0a2... soc:qcom: msm_hotplug v2.4
+
