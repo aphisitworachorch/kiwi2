@@ -585,6 +585,15 @@ config INTELLI_PLUG
 	help
 	  Generic Intelli-plug cpu hotplug driver for ARM SOCs
 
+config THUNDERPLUG_CONTROL
+	bool "Enable plugging down/up of cores using powersuspend"
+	depends on HOTPLUG_CPU
+	default n
+	help
+	 This driver uses powersuspend to take down the cpu cores
+	 on a octa core device.
+
+
 source "drivers/soc/qcom/memshare/Kconfig"
 
 endif # ARCH_MSM
