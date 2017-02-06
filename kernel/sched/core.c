@@ -3773,7 +3773,7 @@ unsigned long this_cpu_load(void)
 	return this->cpu_load[0];
 }
 
-+#ifdef CONFIG_INTELLI_PLUG
+#ifdef CONFIG_INTELLI_PLUG
 unsigned long avg_nr_running(void)
 {
 	unsigned long i, sum = 0;
