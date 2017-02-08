@@ -1,4 +1,3 @@
-#include <linux/cpufreq.h>
 #include <linux/export.h>
 #include <linux/sched.h>
 #include <linux/tsacct_kern.h>
@@ -156,9 +155,6 @@ void account_user_time(struct task_struct *p, cputime_t cputime,
 
 	/* Account for user time used */
 	acct_account_cputime(p);
-
-	/* Account power usage for user time */
-	acct_update_power(p, cputime);
 }
 
 /*
@@ -209,9 +205,6 @@ void __account_system_time(struct task_struct *p, cputime_t cputime,
 
 	/* Account for system time used */
 	acct_account_cputime(p);
-
-	/* Account power usage for system time */
-	acct_update_power(p, cputime);
 }
 
 /*
@@ -271,22 +264,16 @@ static __always_inline bool steal_account_process_tick(void)
 {
 #ifdef CONFIG_PARAVIRT
 	if (static_key_false(&paravirt_steal_enabled)) {
-		u64 steal;
-		cputime_t steal_ct;
+		u64 steal, st = 0;
 
 		steal = paravirt_steal_clock(smp_processor_id());
 		steal -= this_rq()->prev_steal_time;
 
-		/*
-		 * cputime_t may be less precise than nsecs (eg: if it's
-		 * based on jiffies). Lets cast the result to cputime
-		 * granularity and account the rest on the next rounds.
-		 */
-		steal_ct = nsecs_to_cputime(steal);
-		this_rq()->prev_steal_time += cputime_to_nsecs(steal_ct);
+		st = steal_ticks(steal);
+		this_rq()->prev_steal_time += st * TICK_NSEC;
 
-		account_steal_time(steal_ct);
-		return steal_ct;
+		account_steal_time(st);
+		return st;
 	}
 #endif
 	return false;
@@ -534,9 +521,8 @@ static cputime_t scale_stime(u64 stime, u64 rtime, u64 total)
 
 	for (;;) {
 		/* Make sure "rtime" is the bigger of stime/rtime */
-		if (stime > rtime) {
-			u64 tmp = rtime; rtime = stime; stime = tmp;
-		}
+		if (stime > rtime)
+			swap(rtime, stime);
 
 		/* Make sure 'total' fits in 32 bits */
 		if (total >> 32)
