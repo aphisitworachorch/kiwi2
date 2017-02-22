@@ -62,6 +62,10 @@ static int LcdPow_DelayTime = false;
 static bool get_tp_reset_status = false;
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
+#ifdef CONFIG_LAZYPLUG
+extern void lazyplug_enter_lazy(bool enter);
+#endif
+
 bool display_on = true;
 
 bool is_display_on()
@@ -181,6 +185,9 @@ u32 mdss_dsi_panel_cmd_read(struct mdss_dsi_ctrl_pdata *ctrl, char cmd0,
 /*set hs mode flag for read cmd*/
 
 display_on = true;
+#ifdef CONFIG_LAZYPLUG
+	lazyplug_enter_lazy(false); 
+#endif
 
 #ifdef CONFIG_HUAWEI_LCD
 	if(ctrl->esd_check_enable)
@@ -900,6 +907,10 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 	}
 
 		display_on = false;
+
+#ifdef CONFIG_LAZYPLUG
+	lazyplug_enter_lazy(true);
+#endif
 
 #ifndef CONFIG_HUAWEI_LCD
 	if (ctrl->on_cmds.cmd_cnt)
