@@ -347,13 +347,17 @@ CC		= $(srctree)/scripts/gcc-wrapper.py $(REAL_CC)
 CHECKFLAGS	:= -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 			   -Wbitwise -Wno-return-void $(CF)
 MODFLAGS	= -DMODULE
-COMMON_OPT_FLAGS	= -mtune=cortex-a53 \
+COMMON_OPT_FLAGS	= -mtune=cortex-a53 -fmodulo-sched -fmodulo-sched-allow-regmoves \
 					  -pipe
-CFLAGS_MODULE	= $(MODFLAGS) $(COMMON_OPT_FLAGS) -fno-pic
-AFLAGS_MODULE	= $(MODFLAGS) $(COMMON_OPT_FLAGS) -fno-pic
+GRAPHITE	= -fgraphite -fgraphite-identity -floop-parallelize-all \
+			  -ftree-loop-linear -floop-interchange \
+			  -floop-strip-mine -floop-block \
+			  -floop-flatten
+CFLAGS_MODULE	= $(MODFLAGS) $(COMMON_OPT_FLAGS) $(GRAPHITE) -fno-pic
+AFLAGS_MODULE	= $(MODFLAGS) $(COMMON_OPT_FLAGS) $(GRAPHITE) -fno-pic
 LDFLAGS_MODULE	=
-CFLAGS_KERNEL	= $(COMMON_OPT_FLAGS)
-AFLAGS_KERNEL	= $(COMMON_OPT_FLAGS)
+CFLAGS_KERNEL	= $(COMMON_OPT_FLAGS) $(GRAPHITE)
+AFLAGS_KERNEL	= $(COMMON_OPT_FLAGS) $(GRAPHITE)
 CFLAGS_GCOV		= -fprofile-arcs -ftest-coverage
 
 #Define macro to control the compile
