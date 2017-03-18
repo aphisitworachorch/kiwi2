@@ -119,8 +119,12 @@ snd_emux_open_seq_oss(struct snd_seq_oss_arg *arg, void *closure)
 	if (snd_BUG_ON(!arg || !emu))
 		return -ENXIO;
 
-	if (!snd_emux_inc_count(emu))
+	mutex_lock(&emu->register_mutex);
+
+	if (!snd_emux_inc_count(emu)) {
+		mutex_unlock(&emu->register_mutex);
 		return -EFAULT;
+	}
 
 	memset(&callback, 0, sizeof(callback));
 	callback.owner = THIS_MODULE;
@@ -132,6 +136,7 @@ snd_emux_open_seq_oss(struct snd_seq_oss_arg *arg, void *closure)
 	if (p == NULL) {
 		snd_printk(KERN_ERR "can't create port\n");
 		snd_emux_dec_count(emu);
+		mutex_unlock(&emu->register_mutex);
 		return -ENOMEM;
 	}
 
@@ -144,6 +149,8 @@ snd_emux_open_seq_oss(struct snd_seq_oss_arg *arg, void *closure)
 	reset_port_mode(p, arg->seq_mode);
 
 	snd_emux_reset_port(p);
+
+	mutex_unlock(&emu->register_mutex);
 	return 0;
 }
 
@@ -189,11 +196,13 @@ snd_emux_close_seq_oss(struct snd_seq_oss_arg *arg)
 	if (snd_BUG_ON(!emu))
 		return -ENXIO;
 
+	mutex_lock(&emu->register_mutex);
 	snd_emux_sounds_off_all(p);
 	snd_soundfont_close_check(emu->sflist, SF_CLIENT_NO(p->chset.port));
 	snd_seq_event_port_detach(p->chset.client, p->chset.port);
 	snd_emux_dec_count(emu);
 
+	mutex_unlock(&emu->register_mutex);
 	return 0;
 }
 
