@@ -17,7 +17,7 @@ KERNEL_DIR=$PWD
 IMAGE=$KERNEL_DIR/arch/arm64/boot/Image
 #IMAGE=$KERNEL_DIR/arch/arm/boot/zImage for 32 bit architecture
 DTBTOOL=$KERNEL_DIR/scripts/dtbTool
-TOOLCHAIN=$ANDROID_DIR/ubertc/bin
+TOOLCHAIN=$ANDROID_DIR/linaro6/bin
 
 #Paths
 OUT_DIR=$KERNEL_DIR/out
@@ -26,7 +26,7 @@ NEW_OUT=$OUT_DIR/tools
 
 # Kernel Version Info
 BASE="-HotDoG™"
-CUR_VER="-3.3"
+CUR_VER="-4.0"
 HD_VER="$BASE$CUR_VER"
  
 
