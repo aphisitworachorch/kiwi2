@@ -185,7 +185,6 @@ u32 mdss_dsi_panel_cmd_read(struct mdss_dsi_ctrl_pdata *ctrl, char cmd0,
 	cmdreq.flags = CMD_REQ_RX | CMD_REQ_COMMIT;
 /*set hs mode flag for read cmd*/
 
-display_on = true;
 /*
 #ifdef CONFIG_LAZYPLUG
 	lazyplug_enter_lazy(false); 
@@ -897,6 +896,9 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 		pr_err("%s: Invalid input data\n", __func__);
 		return -EINVAL;
 	}
+	
+	display_on = true;
+
 
 	pinfo = &pdata->panel_info;
 	ctrl = container_of(pdata, struct mdss_dsi_ctrl_pdata,
@@ -909,7 +911,6 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 			goto end;
 	}
 
-		display_on = false;
 /*
 #ifdef CONFIG_LAZYPLUG
 	lazyplug_enter_lazy(true);
@@ -1028,6 +1029,8 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 
 	if (ctrl->off_cmds.cmd_cnt)
 		mdss_dsi_panel_cmds_send(ctrl, &ctrl->off_cmds);
+
+	display_on = false;
 
 end:
 	pinfo->blank_state = MDSS_PANEL_BLANK_BLANK;

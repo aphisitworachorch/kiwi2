@@ -39,7 +39,7 @@
 #define DEFAULT_NR_CPUS_BOOSTED		NR_CPUS
 #define DEFAULT_MIN_CPUS_ONLINE		NR_CPUS /8
 #define DEFAULT_MAX_CPUS_ONLINE		NR_CPUS
-#define DEFAULT_NR_FSHIFT		DEFAULT_MAX_CPUS_ONLINE - 1
+#define DEFAULT_NR_FSHIFT		DEFAULT_MAX_CPUS_ONLINE - 4
 #define DEFAULT_DOWN_LOCK_DUR		1500
 #if defined(CONFIG_LCD_NOTIFY) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_HAS_EARLYSUSPEND)
 #define DEFAULT_SUSPEND_DEFER_TIME	10
@@ -199,7 +199,7 @@ static unsigned int calculate_thread_stats(void)
 	unsigned int *current_profile;
 
 	threshold_size = max_cpus_online;
-	nr_run_hysteresis = max_cpus_online * 2;
+	nr_run_hysteresis = max_cpus_online;
 	nr_fshift = max_cpus_online - 1;
 
 	for (nr_run = 1; nr_run < threshold_size; nr_run++) {
