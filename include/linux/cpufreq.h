@@ -412,12 +412,27 @@ extern int __cpufreq_driver_getavg(struct cpufreq_policy *policy,
 
 int cpufreq_register_governor(struct cpufreq_governor *governor);
 void cpufreq_unregister_governor(struct cpufreq_governor *governor);
+int lock_policy_rwsem_write(int cpu);
+void unlock_policy_rwsem_write(int cpu);
+enum {
+	BOOT_CPU = 0,
+};
 
 /* CPUFREQ DEFAULT GOVERNOR */
 /*
  * Performance governor is fallback governor if any other gov failed to auto
  * load due latency restrictions
  */
+#ifdef CONFIG_LOW_CPUCLOCKS
+#define MIN_FREQ_LIMIT	400000
+#else
+#define MIN_FREQ_LIMIT	400000
+#endif
+#ifdef CONFIG_CPU_OVERCLOCK
+#define MAX_FREQ_LIMIT	1497000
+#else
+#define MAX_FREQ_LIMIT	1497000
+#endif
 #ifdef CONFIG_CPU_FREQ_GOV_PERFORMANCE
 extern struct cpufreq_governor cpufreq_gov_performance;
 #endif
