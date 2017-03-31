@@ -55,7 +55,7 @@ static bool sched_boost_active;
 static bool hotplug_boost;
 module_param(hotplug_boost, bool, 0644);
 
-static bool wakeup_boost;
+bool wakeup_boost;
 module_param(wakeup_boost, bool, 0644);
 
 static struct delayed_work input_boost_rem;
@@ -264,6 +264,16 @@ static void cpuboost_input_event(struct input_handle *handle,
 	pr_debug("Input boost for input event.\n");
 	queue_work(cpu_boost_wq, &input_boost_work);
 	last_input_time = ktime_to_us(ktime_get());
+}
+
+bool check_cpuboost(int cpu)
+{
+	struct cpu_sync *i_sync_info;
+	i_sync_info = &per_cpu(sync_info, cpu);
+
+	if (i_sync_info->input_boost_min > 0)
+		return true;
+	return false;
 }
 
 static int cpuboost_input_connect(struct input_handler *handler,
