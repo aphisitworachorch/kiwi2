@@ -29,10 +29,10 @@
 #define DEF_SAMPLING_MS			268
 #define RESUME_SAMPLING_MS		HZ / 10
 #define START_DELAY_MS			HZ * 20
-#define MIN_INPUT_INTERVAL		150 * 1000L
-#define BOOST_LOCK_DUR			2500 * 1000L
-#define DEFAULT_NR_CPUS_BOOSTED		1
-#define DEFAULT_MIN_CPUS_ONLINE		1
+#define MIN_INPUT_INTERVAL		80 * 1000L
+#define BOOST_LOCK_DUR			5500 * 1000L
+#define DEFAULT_NR_CPUS_BOOSTED		8
+#define DEFAULT_MIN_CPUS_ONLINE		2
 #define DEFAULT_MAX_CPUS_ONLINE		NR_CPUS
 #define DEFAULT_NR_FSHIFT		DEFAULT_MAX_CPUS_ONLINE - 1
 #define DEFAULT_DOWN_LOCK_DUR		2500
@@ -72,7 +72,7 @@ struct ip_cpu_info {
 static DEFINE_PER_CPU(struct ip_cpu_info, ip_info);
 
 /* HotPlug Driver controls */
-static atomic_t intelli_plug_active = ATOMIC_INIT(0);
+static atomic_t intelli_plug_active = ATOMIC_INIT(1);
 static unsigned int cpus_boosted = DEFAULT_NR_CPUS_BOOSTED;
 static unsigned int min_cpus_online = DEFAULT_MIN_CPUS_ONLINE;
 static unsigned int max_cpus_online = DEFAULT_MAX_CPUS_ONLINE;
@@ -90,7 +90,7 @@ static unsigned int target_cpus = 0;
 static u64 boost_lock_duration = BOOST_LOCK_DUR;
 static unsigned int def_sampling_ms = DEF_SAMPLING_MS;
 static unsigned int nr_fshift = DEFAULT_NR_FSHIFT;
-static unsigned int nr_run_hysteresis = DEFAULT_MAX_CPUS_ONLINE * 2;
+static unsigned int nr_run_hysteresis = DEFAULT_MAX_CPUS_ONLINE;
 static unsigned int debug_intelli_plug = 0;
 
 #define dprintk(msg...)		\
@@ -188,7 +188,7 @@ static unsigned int calculate_thread_stats(void)
 	unsigned int *current_profile;
 
 	threshold_size = max_cpus_online;
-	nr_run_hysteresis = max_cpus_online * 2;
+	nr_run_hysteresis = max_cpus_online - 2;
 	nr_fshift = max_cpus_online - 1;
 
 	for (nr_run = 1; nr_run < threshold_size; nr_run++) {
