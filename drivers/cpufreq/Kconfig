@@ -325,6 +325,13 @@ config CPU_FREQ_DEFAULT_GOV_ELEMENTALX
 	help
 	  Use the CPUFreq governor 'elementalx' as default.
 
+config CPU_FREQ_DEFAULT_GOV_VIRTUOUS
+	bool "virtuous"
+	select CPU_FREQ_GOV_VIRTUOUS
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the CPUFreq governor 'virtuous' as default.
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -670,6 +677,13 @@ config CPU_FREQ_GOV_ELEMENTALX
 	  For details, take a look at linux/Documentation/cpu-freq.
 
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_VIRTUOUS
+	tristate "'virtuous' cpufreq governor"
+	depends on CPU_FREQ
+	help
+          'virtuous' - a "slightly more agressive smart" optimized governor!
+ 	  If in doubt, say N.
 
 config CPU_BOOST
 	tristate "Event base short term CPU freq boost"
