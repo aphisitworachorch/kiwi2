@@ -898,15 +898,10 @@ static ssize_t mdss_fb_get_doze_mode(struct device *dev,
 
 static int pcc_r = 32768, pcc_g = 32768, pcc_b = 32768;
 static ssize_t mdss_get_rgb(struct device *dev,
-	struct device_attribute *attr, char *buf)
+			    struct device_attribute *attr, char *buf)
 {
-	struct kcal_lut_data lut_data = kcal_ext_show_values();
-
-	return sprintf(buf, "%d %d %d\n", lut_data.red * 128,
-						 lut_data.green * 128,
-						 lut_data.blue * 128);
+       return sprintf(buf, "%d %d %d\n", pcc_r, pcc_g, pcc_b);
 }
-
 
 /*
  * simple color temperature interface using polynomial color correction
