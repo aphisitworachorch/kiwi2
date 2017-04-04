@@ -30,7 +30,7 @@
 #define RESUME_SAMPLING_MS		HZ / 10
 #define START_DELAY_MS			HZ * 20
 #define MIN_INPUT_INTERVAL		80 * 1000L
-#define BOOST_LOCK_DUR			5500 * 1000L
+#define BOOST_LOCK_DUR			4500 * 1000L
 #define DEFAULT_NR_CPUS_BOOSTED		8
 #define DEFAULT_MIN_CPUS_ONLINE		2
 #define DEFAULT_MAX_CPUS_ONLINE		NR_CPUS
@@ -188,7 +188,7 @@ static unsigned int calculate_thread_stats(void)
 	unsigned int *current_profile;
 
 	threshold_size = max_cpus_online;
-	nr_run_hysteresis = max_cpus_online - 2;
+	nr_run_hysteresis = 8;
 	nr_fshift = max_cpus_online - 1;
 
 	for (nr_run = 1; nr_run < threshold_size; nr_run++) {
