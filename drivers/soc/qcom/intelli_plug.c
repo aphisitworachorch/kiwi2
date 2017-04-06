@@ -28,7 +28,7 @@
 
 #define DEF_SAMPLING_MS			268
 #define RESUME_SAMPLING_MS		HZ / 10
-#define START_DELAY_MS			HZ * 20
+#define START_DELAY_MS			0
 #define MIN_INPUT_INTERVAL		80 * 1000L
 #define BOOST_LOCK_DUR			4500 * 1000L
 #define DEFAULT_NR_CPUS_BOOSTED		8
@@ -88,10 +88,19 @@ static unsigned int max_cpus_online_susp = DEFAULT_MAX_CPUS_ONLINE_SUSP;
 /* HotPlug Driver Tuning */
 static unsigned int target_cpus = 0;
 static u64 boost_lock_duration = BOOST_LOCK_DUR;
-static unsigned int def_sampling_ms = DEF_SAMPLING_MS;
-static unsigned int nr_fshift = DEFAULT_NR_FSHIFT;
-static unsigned int nr_run_hysteresis = DEFAULT_MAX_CPUS_ONLINE;
+static unsigned int def_sampling_ms = 268;
+static unsigned int nr_fshift = 4;
+static unsigned int nr_run_hysteresis = 6;
 static unsigned int debug_intelli_plug = 0;
+static unsigned int down_lock_dur = 2500;
+
+module_param(down_lock_dur, uint, 0644);
+module_param(def_sampling_ms, uint, 0644);
+module_param(nr_fshift, uint, 0644);
+module_param(nr_run_hysteresis, uint, 0644);
+module_param(max_cpus_online_susp, uint, 0644);
+module_param(suspend_defer_time, uint, 0644);
+module_param(cpu_nr_run_threshold, uint, 0644);
 
 #define dprintk(msg...)		\
 do { 				\
@@ -150,7 +159,6 @@ static unsigned int *nr_run_profiles[] = {
 	};
 
 static unsigned int nr_run_last;
-static unsigned int down_lock_dur = DEFAULT_DOWN_LOCK_DUR;
 
 struct down_lock {
 	unsigned int locked;
@@ -188,8 +196,6 @@ static unsigned int calculate_thread_stats(void)
 	unsigned int *current_profile;
 
 	threshold_size = max_cpus_online;
-	nr_run_hysteresis = 8;
-	nr_fshift = max_cpus_online - 1;
 
 	for (nr_run = 1; nr_run < threshold_size; nr_run++) {
 		unsigned int nr_threshold;
